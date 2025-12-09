@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú - Tacos San Ángel</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración para usar la fuente Inter -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-red': '#E53E3E', // Un rojo vibrante para tacos
+                        'dark-bg': '#1A202C', // Fondo casi negro
+                        'light-text': '#F7FAFC', // Texto casi blanco
+                        'subtle-dark-bg': '#1E293B', // Gris muy oscuro (slate-900)
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos personalizados */
+        body {
+            /* Nuevo color de fondo: Negro más oscuro */
+            background-color: #121212; 
+            /* Color de texto base para asegurar la legibilidad en el fondo oscuro */
+            color: #E2E8F0; 
+        }
+        .menu-item-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            /* Fondo blanco sólido para resaltar */
+            background-color: #FFFFFF; 
+        }
+        .menu-item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.6); /* Sombra más oscura para contraste */
+        }
+        .header-bg {
+            background-image: linear-gradient(135deg, #E53E3E 0%, #C53030 100%);
+            color: white;
+        }
+
+        /* Ocultar barra de desplazamiento horizontal para una apariencia más limpia en el móvil */
+        #mobile-nav::-webkit-scrollbar {
+            display: none;
+        }
+        #mobile-nav {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        /* Estilo para la animación del modal */
+        #delivery-modal {
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+        #delivery-modal.opacity-100 {
+            opacity: 1;
+        }
+
+        /* Eliminados los estilos de imagen de fondo */
+    </style>
+</head>
+<body>
+
+    <!-- Encabezado del Restaurante (Fijo en la parte superior) -->
+    <header class="header-bg shadow-xl p-4 sm:p-6 sticky top-0 z-20">
+        <!-- Contenedor con Flexbox: Título a la izquierda y botón a la derecha -->
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <!-- Título Principal (Alineado a la izquierda) -->
+            <div class="text-left">
+                <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">TACOS SAN ÁNGEL</h1>
+                <p class="mt-1 text-base font-medium text-red-100 italic">¡El sabor que te levanta!</p>
+            </div>
+
+            <!-- Botón Hamburguesa (Solo visible en móvil, alineado automáticamente a la derecha) -->
+            <button id="hamburger-btn" class="lg:hidden p-2 rounded-full text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-white transition duration-150 ease-in-out" aria-label="Abrir Menú">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Botón Fijo de Enviar a Domicilio (CTA) - Se fija abajo en móvil, se muestra normal en desktop -->
+    <div class="fixed bottom-0 left-0 right-0 p-4 bg-white border-t shadow-2xl z-20 lg:static lg:mt-6 lg:p-0 lg:shadow-none lg:border-none lg:bg-transparent lg:max-w-6xl lg:mx-auto">
+        <button id="delivery-cta" class="w-full lg:w-96 mx-auto block py-3 px-6 bg-primary-red text-white font-bold text-lg rounded-xl shadow-lg hover:bg-red-700 transition duration-300">
+            🛵 Servicio a Domicilio
+        </button>
+    </div>
+
+    <!-- Fondo de superposición (backdrop) para el menú móvil -->
+    <div id="menu-backdrop" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden"></div>
+
+    <!-- Menú Desplegable Lateral (Side Menu) para Móviles -->
+    <!-- CAMBIO: Fondo rojo (primary-red) para que coincida con el encabezado -->
+    <aside id="side-menu" class="fixed top-0 right-0 w-64 max-w-xs h-full bg-primary-red shadow-2xl z-30 transform translate-x-full transition-transform duration-300 ease-in-out lg:hidden">
+        <!-- CAMBIO: Cabecera del menú con texto blanco y borde rojo oscuro -->
+        <div class="p-4 border-b border-red-700 flex justify-between items-center">
+            <h3 class="text-xl font-bold text-white">Menú</h3>
+            <!-- Botón para cerrar el menú, ahora blanco contra rojo -->
+            <button id="close-menu-btn" class="p-2 text-white hover:bg-red-700 rounded focus:outline-none" aria-label="Cerrar Menú">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div id="nav-content" class="p-4 flex flex-col space-y-2">
+            <!-- Los botones de sección se inyectarán aquí mediante JavaScript (ahora en tonos de rojo oscuro) -->
+        </div>
+    </aside>
+
+    <!-- Contenedor Principal del Menú (Padding superior normalizado) -->
+    <main id="menu-container" class="max-w-6xl mx-auto p-4 sm:p-8 lg:pb-8">
+        <!-- El padding inferior (pb-8) evita que el contenido quede cubierto por el CTA fijo en móvil -->
+        
+        <!-- Aquí se generará el contenido del menú con JavaScript -->
+
+    </main>
+
+    <!-- Modal/Action Sheet para Selección de Número de Envío -->
+    <div id="delivery-modal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden" aria-modal="true" role="dialog">
+        <div id="delivery-modal-content" class="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl p-6 transform translate-y-full transition-transform duration-300 ease-out lg:bottom-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:max-w-md lg:rounded-xl">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Selecciona un número de envío</h3>
+            <div id="phone-buttons-container" class="space-y-3">
+                <!-- Botones de número se inyectarán aquí por JS -->
+            </div>
+            <button id="close-delivery-modal" class="mt-6 w-full py-3 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition duration-300">
+                Cerrar
+            </button>
+        </div>
+    </div>
+
+    <!-- Pie de Página Sencillo (Actualizado con fondo negro puro para mayor contraste) -->
+    <!-- Se ha cambiado 'bg-dark-bg' a 'bg-black' -->
+    <footer class="bg-black text-center p-6 mt-12 mb-20 lg:mb-0 text-light-text">
+        <p class="text-sm">&copy; 2025 Tacos San Ángel. Todos los derechos reservados.</p>
+        <p class="text-xs mt-1">desarrollador web: Ing. Edgar Lomas</p>
+    </footer>
+
+    <script>
+        // --- DATA SECTION (Ahora usa rutas de imagen locales/reales en lugar de placeholders) ---
+        
+        // Array de objetos que define todo el menú con IDs para la navegación
+        const menuData = [
+            {
+                section: "Tacos",
+                icon: "🌮",
+                id: "tacos",
+                items: [
+                    // RUTA DE EJEMPLO: Reemplaza './images/...' con la ruta real de tu imagen.
+                    { name: "Tacos de Trompo", description: "Carne de pastor marinada en tortilla de maíz.", imageUrl: './burguer.jpg' },
+                    { name: "Tacos de Bistec", description: "Jugoso bistec a la plancha en tortilla de maíz.", imageUrl: './burguer.jpg' },
+                    { name: "Tacos Mixtos", description: "Combinación de trompo y bistec.", imageUrl: './burguer.jpg' },
+                    { name: "Caprichos", description: "Tortilla de maíz rellena de queso, bistec y aguacate.", imageUrl: './burguer.jpg' },
+                    { name: "Volcanes", description: "Tostada crujiente con queso gratinado y la carne de tu elección.", imageUrl: './burguer.jpg' }
+                ]
+            },
+            {
+                section: "Hamburguesas",
+                icon: "🍔",
+                id: "hamburguesas",
+                items: [
+                    { name: "Hamburguesa Sencilla", description: "Carne, queso y verduras frescas (sin papas).", imageUrl: './burguer.jpg' },
+                    { name: "Hamburguesa Sencilla con Papas", description: "Carne, queso y verduras frescas (incluye papas).", imageUrl: './burguer.jpg' },
+                    { name: "Bisteckburguer con Papas", description: "Hamburguesa con un toque de bistec extra (incluye papas).", imageUrl: './burguer.jpg' },
+                    { name: "Trompo Búrguer con Papas", description: "Hamburguesa con la deliciosa carne de trompo (incluye papas).", imageUrl: './burguer.jpg' },
+                    { name: "Hamburguesa Doble con Papas", description: "Doble carne, doble queso (incluye papas).", imageUrl: './burguer.jpg' },
+                    { name: "Hamburguesa Hawaiana con Papas", description: "Con jamón y piña para un toque dulce (incluye papas).", imageUrl: './burguer.jpg' }
+                ]
+            },
+            {
+                section: "Harinas",
+                icon: "🌯",
+                id: "harinas",
+                items: [
+                    { name: "Gringas", description: "Tortilla de harina con queso y trompo.", imageUrl: './burguer.jpg' },
+                    { name: "Campechana Grande", description: "Tortilla de harina con queso, bistec y trompo.", imageUrl: './burguer.jpg' },
+                    { name: "Burrito", description: "Tortilla de harina rellena de frijol y carne (deshebrada, trompo, bistec o mixtos).", imageUrl: './burguer.jpg' },
+                    { name: "Pirata Grande", description: "Tortilla de harina con bistec y abundante queso gratinado.", imageUrl: './burguer.jpg' },
+                    { name: "Quesadilla Grande", description: "Tortilla de harina con gran porción de queso Chihuahua.", imageUrl: './burguer.jpg' },
+                    { name: "Costra de Queso", description: "Una capa crujiente de queso gratinado con la carne que elijas.", imageUrl: './burguer.jpg' }
+                ]
+            },
+            {
+                section: "Papas",
+                icon: "🍟",
+                id: "papas",
+                items: [
+                    { name: "Papas", description: "Una porción de papas a la francesa.", imageUrl: './burguer.jpg' },
+                    { name: "Papa Asada", description: "Papa grande al horno rellena de mantequilla, queso y topping de tu elección (trompo, bistec, mixta o con champiñones).", imageUrl: './burguer.jpg' },
+                    { name: "Orden de Papas a la Francesa", description: "Porción grande de papas fritas.", imageUrl: './burguer.jpg' },
+                    { name: "Orden de Papas Galbana", description: "Papas fritas sazonadas a la manera de la casa.", imageUrl: './burguer.jpg' }
+                ]
+            },
+            {
+                section: "Frijoles Charros",
+                icon: "🥣",
+                id: "frijoles-charros",
+                items: [
+                    { name: "Frijoles Charros (Normal 1/2 Litro)", description: "Frijoles tradicionales con tocino y salchicha.", imageUrl: './burguer.jpg' },
+                    { name: "Frijoles Charros Preparados 1/2 Litro", description: "Frijoles charros enriquecidos con trompo, bistec o mixtos.", imageUrl: './burguer.jpg' }
+                ]
+            }
+        ];
+
+        // --- DATA DE NÚMEROS DE ENVÍO ---
+        const deliveryNumbers = [
+            // Números de ejemplo. ¡Recuerda reemplazarlos por tus números reales!
+            { name: "Línea 1 - Principal", number: "tel:+528180001000", display: "81 8000 1000" },
+            { name: "Línea 2 - Refuerzo", number: "tel:+528180002000", display: "81 8000 2000" },
+            { name: "Línea 3 - WhatsApp", number: "tel:+528180003000", display: "81 8000 3000" }
+        ];
+
+        const container = document.getElementById('menu-container');
+
+        // --- FUNCIONES DE NAVEGACIÓN LATERAL (Menú Hamburguesa) ---
+
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const sideMenu = document.getElementById('side-menu');
+        const menuBackdrop = document.getElementById('menu-backdrop');
+
+        // Función para abrir/cerrar el menú lateral
+        function toggleMenu(open) {
+            if (open) {
+                sideMenu.classList.remove('translate-x-full');
+                sideMenu.classList.add('translate-x-0');
+                menuBackdrop.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                sideMenu.classList.remove('translate-x-0');
+                sideMenu.classList.add('translate-x-full');
+                menuBackdrop.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Event Listeners para el toggle del menú
+        hamburgerBtn.addEventListener('click', () => toggleMenu(true));
+        closeMenuBtn.addEventListener('click', () => toggleMenu(false));
+        menuBackdrop.addEventListener('click', () => toggleMenu(false));
+
+
+        // --- FUNCIONES DE MODAL DE ENVÍO ---
+        const deliveryCtaBtn = document.getElementById('delivery-cta');
+        const deliveryModal = document.getElementById('delivery-modal');
+        const deliveryModalContent = document.getElementById('delivery-modal-content');
+        const closeDeliveryModalBtn = document.getElementById('close-delivery-modal');
+        const phoneButtonsContainer = document.getElementById('phone-buttons-container');
+
+        // Abre el modal de selección de número
+        function openDeliveryModal() {
+            deliveryModal.classList.remove('hidden');
+            // Retraso para iniciar la animación de opacidad y deslizamiento
+            setTimeout(() => {
+                deliveryModal.classList.add('opacity-100');
+                deliveryModalContent.classList.remove('translate-y-full');
+            }, 10);
+            document.body.style.overflow = 'hidden'; // Bloquea el scroll del fondo
+            renderPhoneButtons();
+        }
+
+        // Cierra el modal de selección de número
+        function closeDeliveryModal() {
+            deliveryModal.classList.remove('opacity-100');
+            deliveryModalContent.classList.add('translate-y-full');
+            
+            // Oculta el modal después de que termine la animación de cierre
+            setTimeout(() => {
+                deliveryModal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300); // 300ms debe coincidir con la transición CSS
+        }
+
+        // RENDERIZA los botones de teléfono dentro del modal
+        function renderPhoneButtons() {
+            phoneButtonsContainer.innerHTML = '';
+            deliveryNumbers.forEach(contact => {
+                const button = document.createElement('a');
+                // Usa el protocolo tel: para iniciar una llamada
+                button.href = contact.number;
+                button.className = 'w-full flex justify-between items-center py-3 px-4 bg-gray-100 text-gray-800 font-semibold rounded-lg hover:bg-primary-red hover:text-white transition duration-200 shadow-md';
+                // Contenido del botón con nombre de línea y número
+                button.innerHTML = `
+                    <span class="text-sm font-medium">${contact.name}</span>
+                    <span class="text-lg font-extrabold">${contact.display}</span>
+                `;
+                // Añadir evento click para cerrar el modal al seleccionar un número
+                button.addEventListener('click', closeDeliveryModal);
+                phoneButtonsContainer.appendChild(button);
+            });
+        }
+        
+        // Event Listeners para el Modal de Envío
+        deliveryCtaBtn.addEventListener('click', openDeliveryModal);
+        closeDeliveryModalBtn.addEventListener('click', closeDeliveryModal);
+        deliveryModal.addEventListener('click', (e) => {
+            // Cierra si el clic fue directamente en el fondo del modal (no en el contenido)
+            if (e.target.id === 'delivery-modal') {
+                closeDeliveryModal();
+            }
+        });
+
+
+        // --- FUNCIONES DE RENDERIZADO DEL MENÚ ---
+
+        // Función para renderizar el menú como un catálogo
+        function renderMenu() {
+            container.innerHTML = ''; // Limpiar el contenedor
+            
+            menuData.forEach(category => {
+                // Título de la sección
+                const sectionHeader = document.createElement('h2');
+                // Se removieron las clases 'border-b-2' y 'border-primary-red' para una apariencia más limpia.
+                // El padding inferior se aumentó a 'pb-4' para mantener la separación.
+                sectionHeader.className = 'text-3xl sm:text-4xl font-bold mt-10 mb-6 text-primary-red pb-4';
+                sectionHeader.innerHTML = `${category.icon} ${category.section}`;
+                sectionHeader.id = category.id; // Asignar el ID para navegación
+                container.appendChild(sectionHeader);
+
+                // Grid para los elementos de la sección (Catálogo)
+                const itemsGrid = document.createElement('div');
+                // Cuadrícula de 1, 2 o 3 columnas según el tamaño de la pantalla
+                itemsGrid.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8';
+
+                category.items.forEach(item => {
+                    // Tarjeta del producto (Catálogo vertical)
+                    const itemCard = document.createElement('div');
+                    // Tarjeta ahora con fondo blanco sólido
+                    itemCard.className = 'menu-item-card bg-white rounded-xl shadow-xl overflow-hidden flex flex-col hover:shadow-2xl'; 
+                    
+                    // Imagen del Producto
+                    const image = document.createElement('img');
+                    image.src = item.imageUrl; // *** AQUÍ USA LA RUTA DE LA IMAGEN ***
+                    image.alt = item.name;
+                    // Clase para la imagen: ocupa todo el ancho y tiene una altura fija
+                    image.className = 'w-full h-48 object-cover';
+                    // Fallback de imagen en caso de error (muestra un placeholder de texto)
+                    image.onerror = function() { 
+                        this.src = 'https://placehold.co/400x300/4A5568/FFFFFF?text=Imagen+No+Disponible'; 
+                        this.className = 'w-full h-48 object-contain bg-gray-200';
+                    };
+                    itemCard.appendChild(image);
+
+                    // Contenido (Nombre y Descripción)
+                    const content = document.createElement('div');
+                    content.className = 'p-4 flex-grow';
+                    // Textos dentro de la tarjeta deben ser oscuros
+                    content.innerHTML = `
+                        <h3 class="text-xl font-bold text-gray-800">${item.name}</h3>
+                        <p class="text-sm text-gray-500 mt-1">${item.description}</p>
+                    `;
+                    itemCard.appendChild(content);
+
+                    // Precio (Siempre en la parte inferior, destacado)
+                    const priceContainer = document.createElement('div');
+                    priceContainer.className = 'p-4 pt-0 text-right border-t border-gray-100';
+                    priceContainer.innerHTML = `
+                        <span class="text-3xl font-extrabold text-primary-red">
+                            <!-- HUECO DEL PRECIO: Reemplaza $XX.XX por el precio real -->
+                            $XX.XX
+                            <!-- FIN HUECO DEL PRECIO -->
+                        </span>
+                        <p class="text-xs text-gray-400">MXN</p>
+                    `;
+                    itemCard.appendChild(priceContainer);
+
+                    itemsGrid.appendChild(itemCard);
+                });
+
+                container.appendChild(itemsGrid);
+            });
+        }
+
+        // Función para configurar la barra de navegación móvil (ahora el menú lateral)
+        function setupMobileNav() {
+            const navContent = document.getElementById('nav-content');
+            navContent.innerHTML = '';
+            
+            menuData.forEach(category => {
+                const button = document.createElement('button');
+                // Usamos clases de Tailwind para darle estilo a los botones del menú lateral
+                button.textContent = `${category.icon} ${category.section}`;
+                // CAMBIO: Fondo rojo oscuro (bg-red-700) y hover más oscuro para destacar sobre el fondo primary-red
+                button.className = 'w-full text-left px-4 py-2 rounded-lg text-lg font-semibold text-white bg-red-700 hover:bg-red-800 transition duration-150 ease-in-out';
+                
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // 1. Cierra el menú lateral antes de hacer scroll
+                    toggleMenu(false); 
+
+                    // 2. Realiza el scroll
+                    const targetElement = document.getElementById(category.id);
+                    if (targetElement) {
+                        // Obtener la altura del header fijo para evitar que tape el título de la sección
+                        const headerHeight = document.querySelector('header').offsetHeight;
+                        const fixedOffset = headerHeight + 20; // Altura del header + 20px de margen
+
+                        const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - fixedOffset;
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+                navContent.appendChild(button);
+            });
+        }
+
+        // Llamar a las funciones para cargar el menú y configurar la navegación al iniciar
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMenu();
+            setupMobileNav();
+        });
+    </script>
+</body>
+</html>
