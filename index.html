@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú - Tacos San Ángel</title>
+    <title>Menú - Tacos elchoky</title>
     <!-- Carga de Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Configuración para usar la fuente Inter -->
@@ -74,7 +74,7 @@
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <!-- Título Principal (Alineado a la izquierda) -->
             <div class="text-left">
-                <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">TACOS SAN ÁNGEL</h1>
+                <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">TACOS elchoky</h1>
                 <p class="mt-1 text-base font-medium text-red-100 italic">¡El sabor que te levanta!</p>
             </div>
 
@@ -86,7 +86,8 @@
     </header>
 
     <!-- Botón Fijo de Enviar a Domicilio (CTA) - Se fija abajo en móvil, se muestra normal en desktop -->
-    <div class="fixed bottom-0 left-0 right-0 p-4 bg-white border-t shadow-2xl z-20 lg:static lg:mt-6 lg:p-0 lg:shadow-none lg:border-none lg:bg-transparent lg:max-w-6xl lg:mx-auto">
+    <!-- CAMBIO: Se eliminó el fondo negro (bg-black) y el borde superior (border-t) para que muestre el fondo oscuro de la página. -->
+    <div class="fixed bottom-0 left-0 right-0 p-4 bg-transparent shadow-2xl z-20 lg:static lg:mt-6 lg:p-0 lg:shadow-none lg:border-none lg:bg-transparent lg:max-w-6xl lg:mx-auto">
         <button id="delivery-cta" class="w-full lg:w-96 mx-auto block py-3 px-6 bg-primary-red text-white font-bold text-lg rounded-xl shadow-lg hover:bg-red-700 transition duration-300">
             🛵 Servicio a Domicilio
         </button>
@@ -135,8 +136,8 @@
     <!-- Pie de Página Sencillo (Actualizado con fondo negro puro para mayor contraste) -->
     <!-- Se ha cambiado 'bg-dark-bg' a 'bg-black' -->
     <footer class="bg-black text-center p-6 mt-12 mb-20 lg:mb-0 text-light-text">
-        <p class="text-sm">&copy; 2025 Tacos San Ángel. Todos los derechos reservados.</p>
-        <p class="text-xs mt-1">desarrollador web: Ing. Edgar Lomas</p>
+        <p class="text-sm">&copy; 2025 Tacos elchoky. Todos los derechos reservados.</p>
+        <p class="text-xs mt-1">Desarrollador Web: Ing. Edgar Lomas</p>
     </footer>
 
     <script>
@@ -150,11 +151,11 @@
                 id: "tacos",
                 items: [
                     // RUTA DE EJEMPLO: Reemplaza './images/...' con la ruta real de tu imagen.
-                    { name: "Tacos de Trompo", description: "Carne de pastor marinada en tortilla de maíz.", imageUrl: './burguer.jpg' },
-                    { name: "Tacos de Bistec", description: "Jugoso bistec a la plancha en tortilla de maíz.", imageUrl: './burguer.jpg' },
-                    { name: "Tacos Mixtos", description: "Combinación de trompo y bistec.", imageUrl: './burguer.jpg' },
-                    { name: "Caprichos", description: "Tortilla de maíz rellena de queso, bistec y aguacate.", imageUrl: './burguer.jpg' },
-                    { name: "Volcanes", description: "Tostada crujiente con queso gratinado y la carne de tu elección.", imageUrl: './burguer.jpg' }
+                    { name: "Tacos de Trompo", description: "Carne de pastor marinada en tortilla de maíz.", imageUrl: './tacotrompo.jpg', price: 20 },
+                    { name: "Tacos de Bistec", description: "Jugoso bistec a la plancha en tortilla de maíz.", imageUrl: './tacotrompo.jpg', price: 22 },
+                    { name: "Tacos Mixtos", description: "Combinación de trompo y bistec.", imageUrl: './tacotrompo.jpg', price: 21 },
+                    { name: "Caprichos", description: "Tortilla de maíz rellena de queso, bistec y aguacate.", imageUrl: './tacotrompo.jpg', price: 40 },
+                    { name: "Volcanes", description: "Tostada crujiente con queso gratinado y la carne de tu elección.", imageUrl: './tacotrompo.jpg', price: 38 }
                 ]
             },
             {
@@ -162,12 +163,12 @@
                 icon: "🍔",
                 id: "hamburguesas",
                 items: [
-                    { name: "Hamburguesa Sencilla", description: "Carne, queso y verduras frescas (sin papas).", imageUrl: './burguer.jpg' },
-                    { name: "Hamburguesa Sencilla con Papas", description: "Carne, queso y verduras frescas (incluye papas).", imageUrl: './burguer.jpg' },
-                    { name: "Bisteckburguer con Papas", description: "Hamburguesa con un toque de bistec extra (incluye papas).", imageUrl: './burguer.jpg' },
-                    { name: "Trompo Búrguer con Papas", description: "Hamburguesa con la deliciosa carne de trompo (incluye papas).", imageUrl: './burguer.jpg' },
-                    { name: "Hamburguesa Doble con Papas", description: "Doble carne, doble queso (incluye papas).", imageUrl: './burguer.jpg' },
-                    { name: "Hamburguesa Hawaiana con Papas", description: "Con jamón y piña para un toque dulce (incluye papas).", imageUrl: './burguer.jpg' }
+                    { name: "Hamburguesa Sencilla", description: "Carne, queso y verduras frescas (sin papas).", imageUrl: './burguer.jpg', price: 65 },
+                    { name: "Hamburguesa Sencilla con Papas", description: "Carne, queso y verduras frescas (incluye papas).", imageUrl: './burguer.jpg', price: 85 },
+                    { name: "Bisteckburguer con Papas", description: "Hamburguesa con un toque de bistec extra (incluye papas).", imageUrl: './burguer.jpg', price: 95 },
+                    { name: "Trompo Búrguer con Papas", description: "Hamburguesa con la deliciosa carne de trompo (incluye papas).", imageUrl: './burguer.jpg', price: 90 },
+                    { name: "Hamburguesa Doble con Papas", description: "Doble carne, doble queso (incluye papas).", imageUrl: './burguer.jpg', price: 110 },
+                    { name: "Hamburguesa Hawaiana con Papas", description: "Con jamón y piña para un toque dulce (incluye papas).", imageUrl: './burguer.jpg', price: 90 }
                 ]
             },
             {
@@ -175,12 +176,12 @@
                 icon: "🌯",
                 id: "harinas",
                 items: [
-                    { name: "Gringas", description: "Tortilla de harina con queso y trompo.", imageUrl: './burguer.jpg' },
-                    { name: "Campechana Grande", description: "Tortilla de harina con queso, bistec y trompo.", imageUrl: './burguer.jpg' },
-                    { name: "Burrito", description: "Tortilla de harina rellena de frijol y carne (deshebrada, trompo, bistec o mixtos).", imageUrl: './burguer.jpg' },
-                    { name: "Pirata Grande", description: "Tortilla de harina con bistec y abundante queso gratinado.", imageUrl: './burguer.jpg' },
-                    { name: "Quesadilla Grande", description: "Tortilla de harina con gran porción de queso Chihuahua.", imageUrl: './burguer.jpg' },
-                    { name: "Costra de Queso", description: "Una capa crujiente de queso gratinado con la carne que elijas.", imageUrl: './burguer.jpg' }
+                    { name: "Gringas", description: "Tortilla de harina con queso y trompo.", imageUrl: './harina.jpg', price: 40 },
+                    { name: "Campechana Grande", description: "Tortilla de harina con queso, bistec y trompo.", imageUrl: './harina.jpg', price: 55 },
+                    { name: "Burrito", description: "Tortilla de harina rellena de frijol y carne (deshebrada, trompo, bistec o mixtos).", imageUrl: './harina.jpg', price: 60 },
+                    { name: "Pirata Grande", description: "Tortilla de harina con bistec y abundante queso gratinado.", imageUrl: './harina.jpg', price: 65 },
+                    { name: "Quesadilla Grande", description: "Tortilla de harina con gran porción de queso Chihuahua.", imageUrl: './harina.jpg', price: 50 },
+                    { name: "Costra de Queso", description: "Una capa crujiente de queso gratinado con la carne que elijas.", imageUrl: './harina.jpg', price: 70 }
                 ]
             },
             {
@@ -188,10 +189,10 @@
                 icon: "🍟",
                 id: "papas",
                 items: [
-                    { name: "Papas", description: "Una porción de papas a la francesa.", imageUrl: './burguer.jpg' },
-                    { name: "Papa Asada", description: "Papa grande al horno rellena de mantequilla, queso y topping de tu elección (trompo, bistec, mixta o con champiñones).", imageUrl: './burguer.jpg' },
-                    { name: "Orden de Papas a la Francesa", description: "Porción grande de papas fritas.", imageUrl: './burguer.jpg' },
-                    { name: "Orden de Papas Galbana", description: "Papas fritas sazonadas a la manera de la casa.", imageUrl: './burguer.jpg' }
+                    { name: "Papas", description: "Una porción de papas a la francesa.", imageUrl: './papas.png', price: 40 },
+                    { name: "Papa Asada", description: "Papa grande al horno rellena de mantequilla, queso y topping de tu elección (trompo, bistec, mixta o con champiñones).", imageUrl: './papas.png', price: 75 },
+                    { name: "Orden de Papas a la Francesa", description: "Porción grande de papas fritas.", imageUrl: './papas.png', price: 50 },
+                    { name: "Orden de Papas Galbana", description: "Papas fritas sazonadas a la manera de la casa.", imageUrl: './papas.png', price: 55 }
                 ]
             },
             {
@@ -199,10 +200,35 @@
                 icon: "🥣",
                 id: "frijoles-charros",
                 items: [
-                    { name: "Frijoles Charros (Normal 1/2 Litro)", description: "Frijoles tradicionales con tocino y salchicha.", imageUrl: './burguer.jpg' },
-                    { name: "Frijoles Charros Preparados 1/2 Litro", description: "Frijoles charros enriquecidos con trompo, bistec o mixtos.", imageUrl: './burguer.jpg' }
+                    { name: "Frijoles Charros (Normal 1/2 Litro)", description: "Frijoles tradicionales con tocino y salchicha.", imageUrl: './frijoles.jpg', price: 45 },
+                    { name: "Frijoles Charros Preparados 1/2 Litro", description: "Frijoles charros enriquecidos con trompo, bistec o mixtos.", imageUrl: './frijoles.jpg', price: 60 }
+                ]
+            },
+            {
+                section: "Bebidas",
+                icon: "🥤",
+                id: "bebidas",
+                items: [
+                    { name: "Coca Cola", description: "Refresco de cola de 355 ml.", imageUrl: './355coca.jpeg', price: 35 },
+                    { name: "Coca Cola", description: "Refresco de cola de 600 ml.", imageUrl: './355coca.jpeg', price: 40 },
+                    { name: "Coca Cola", description: "Refresco de cola de 1.25 litros.", imageUrl: './355coca.jpeg', price: 60 },
+                    { name: "Agua Natural", description: "Botella de agua natural purificada de 600 ml.", imageUrl: './agua.png', price: 25 }
+                ]
+            },
+            // SECCIÓN DE PROMOCIONES AGREGADA
+            {
+                section: "Promociones",
+                icon: "⭐", // Icono de estrella para promociones
+                id: "promociones",
+                items: [
+                    { name: "Paquete 1", description: "1 orden de bistec, 1 orden de trompo, 1 campechana y 1 gringa.", imageUrl: './images/paquete-1.jpg', price: 300 },
+                    { name: "Paquete 2", description: "4 campechanas grandes (tortilla de harina con queso, bistec y trompo).", imageUrl: './images/paquete-2.jpg', price: 300 },
+                    { name: "Paquete 3", description: "3 órdenes mixtas (combinación de trompo y bistec, 5 tacos cada orden).", imageUrl: './images/paquete-3.jpg', price: 270 },
+                    { name: "Paquete 4", description: "4 hamburguesas sencillas (carne, queso y verduras frescas, sin papas).", imageUrl: './images/paquete-4.jpg', price: 260 },
+                    { name: "Paquete 5", description: "2 órdenes de trompo (5 tacos c/u), 1 campechana y 1 pirata grande.", imageUrl: './images/paquete-5.jpg', price: 300 }
                 ]
             }
+            // FIN DE SECCIÓN DE PROMOCIONES
         ];
 
         // --- DATA DE NÚMEROS DE ENVÍO ---
@@ -357,11 +383,10 @@
                     // Precio (Siempre en la parte inferior, destacado)
                     const priceContainer = document.createElement('div');
                     priceContainer.className = 'p-4 pt-0 text-right border-t border-gray-100';
+                    // Se usa `item.price` para mostrar el precio
                     priceContainer.innerHTML = `
                         <span class="text-3xl font-extrabold text-primary-red">
-                            <!-- HUECO DEL PRECIO: Reemplaza $XX.XX por el precio real -->
-                            $XX.XX
-                            <!-- FIN HUECO DEL PRECIO -->
+                            $${item.price.toFixed(2)}
                         </span>
                         <p class="text-xs text-gray-400">MXN</p>
                     `;
