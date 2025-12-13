@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menú - Tacos SAN MIGUEL</title>
+    <link rel="icon" href="logo.ico">
     <!-- Carga de Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Configuración para usar la fuente Inter -->
@@ -12,10 +13,14 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-red': '#E53E3E', // Un rojo vibrante para tacos
-                        'dark-bg': '#1A202C', // Fondo casi negro
-                        'light-text': '#F7FAFC', // Texto casi blanco
-                        'subtle-dark-bg': '#1E293B', // Gris muy oscuro (slate-900)
+                        // Rojo principal vibrante (Taco Red)
+                        'primary-red': '#DD1C1A', 
+                        // Fondo oscuro casi negro
+                        'dark-bg': '#0A0A0A', 
+                        // Gris oscuro sutil para el fondo de cards o secciones
+                        'subtle-dark-bg': '#1F2937', 
+                        // Texto claro
+                        'light-text': '#F3F4F6', 
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -27,34 +32,45 @@
     <style>
         /* Estilos personalizados */
         body {
-            /* Nuevo color de fondo: Negro más oscuro */
-            background-color: #121212; 
-            /* Color de texto base para asegurar la legibilidad en el fondo oscuro */
-            color: #E2E8F0; 
+            /* Fondo negro puro para alto contraste */
+            background-color: #0A0A0A; 
+            color: #E5E7EB; /* Texto gris claro */
         }
+        
+        /* Estilo mejorado para la tarjeta del menú */
         .menu-item-card {
-            transition: transform 0.2s, box-shadow 0.2s;
-            /* Fondo blanco sólido para resaltar */
-            background-color: #FFFFFF; 
+            /* Fondo blanco cremoso para resaltar el producto */
+            background-color: #FEFEFE; 
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            /* SE HA ELIMINADO: border: 1px solid #E5E7EB; */
+            overflow: hidden;
         }
         .menu-item-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.6); /* Sombra más oscura para contraste */
+            transform: translateY(-8px);
+            /* Sombra más dramática y roja al hacer hover */
+            box-shadow: 0 25px 50px -12px rgba(221, 28, 26, 0.4), 0 8px 15px -3px rgba(0, 0, 0, 0.4); 
         }
+
+        /* Degradado del Encabezado (Más profundo y agresivo) */
         .header-bg {
-            background-image: linear-gradient(135deg, #E53E3E 0%, #C53030 100%);
+            background: linear-gradient(135deg, #DD1C1A 0%, #B91C1C 100%);
             color: white;
         }
 
-        /* Ocultar barra de desplazamiento horizontal para una apariencia más limpia en el móvil */
-        #mobile-nav::-webkit-scrollbar {
-            display: none;
+        /* Estilo para los botones de navegación lateral (mejor contraste) */
+        .nav-btn-mobile {
+             background-color: #991B1B; /* Un rojo más oscuro */
+             transition: background-color 0.15s;
         }
-        #mobile-nav {
-            -ms-overflow-style: none; /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+        .nav-btn-mobile:hover {
+             background-color: #B91C1C;
         }
-        /* Estilo para la animación del modal */
+        
+        /* Ocultar barra de desplazamiento para un diseño limpio */
+        #mobile-nav::-webkit-scrollbar { display: none; }
+        #mobile-nav { -ms-overflow-style: none; scrollbar-width: none; } 
+
+        /* Animación de entrada para el modal de delivery */
         #delivery-modal {
             opacity: 0;
             transition: opacity 0.3s ease-out;
@@ -63,85 +79,189 @@
             opacity: 1;
         }
 
-        /* Eliminados los estilos de imagen de fondo */
+        /* Estilo para los botones de plataformas de delivery */
+        .delivery-platform-icon {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Clase para el botón principal (más grande y con sombra) */
+        .cta-button {
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 10px 15px -3px rgba(221, 28, 26, 0.5), 0 4px 6px -2px rgba(221, 28, 26, 0.5);
+            background-image: linear-gradient(to right, #DD1C1A 0%, #B91C1C 100%);
+        }
+        .cta-button:hover {
+            background-image: linear-gradient(to right, #B91C1C 0%, #DD1C1A 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -5px rgba(221, 28, 26, 0.6), 0 6px 10px -3px rgba(221, 28, 26, 0.6);
+        }
+
+        /* --- Estilos para el Carrusel de Texto (Marquee) --- */
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            /* Se mueve exactamente 1/6 del ancho total del contenido (la anchura de un bloque repetido) 
+               para que el loop sea seamless (sin saltos). */
+            100% { transform: translateX(calc(-100% / 6)); } 
+        }
+
+        .marquee-content {
+            /* Velocidad de la animación, modo lineal, repetición infinita */
+            animation: marquee 15s linear infinite; 
+            white-space: nowrap; /* Evita que el texto se divida en líneas */
+            display: flex; /* Usa flex para que los elementos repetidos estén en fila */
+            width: fit-content; /* El ancho se ajusta al contenido total (6 repeticiones) */
+        }
+        
+        .marquee-content > span {
+            /* Espacio entre cada repetición del texto */
+            padding-right: 2rem; 
+            flex-shrink: 0; /* Evita que los elementos se encojan */
+        }
+        /* ------------------------------------------------ */
+
     </style>
 </head>
 <body>
 
     <!-- Encabezado del Restaurante (Fijo en la parte superior) -->
-    <header class="header-bg shadow-xl p-4 sm:p-6 sticky top-0 z-20">
+    <header class="header-bg shadow-2xl p-4 sm:p-6 sticky top-0 z-20">
         <!-- Contenedor con Flexbox: Título a la izquierda y botón a la derecha -->
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <!-- Título Principal (Alineado a la izquierda) -->
             <div class="text-left">
-                <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">TACOS SAN MIGUEL</h1>
-                <p class="mt-1 text-base font-medium text-red-100 italic">¡El sabor que te levanta!</p>
+                <h1 class="text-3xl font-extrabold tracking-tight sm:text-5xl text-white drop-shadow-md">TACOS SAN MIGUEL</h1>
+                <p class="mt-1 text-base font-medium italic text-red-200">¡El sabor que te levanta!</p>
             </div>
 
-            <!-- Botón Hamburguesa (Solo visible en móvil, alineado automáticamente a la derecha) -->
-            <button id="hamburger-btn" class="lg:hidden p-2 rounded-full text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-white transition duration-150 ease-in-out" aria-label="Abrir Menú">
+            <!-- Botón Hamburguesa (Solo visible en móvil) -->
+            <button id="hamburger-btn" class="lg:hidden p-2 rounded-full text-white hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-white transition duration-150 ease-in-out" aria-label="Abrir Menú">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
             </button>
         </div>
     </header>
 
-    <!-- Botón Fijo de Enviar a Domicilio (CTA) - Se fija abajo en móvil, se muestra normal en desktop -->
-    <!-- CAMBIO: Se eliminó el fondo negro (bg-black) y el borde superior (border-t) para que muestre el fondo oscuro de la página. -->
+    <!-- Carrusel de Texto Infinito (Marquee) - Pega justo al borde de la barra de navegación principal -->
+    <div class="w-full bg-yellow-400 text-dark-bg overflow-hidden z-10">
+        <!-- CLASE AÑADIDA: 'italic' (cursiva) ya estaba y se mantiene -->
+        <div class="marquee-content py-2 font-extrabold text-xl sm:text-2xl md:text-3xl tracking-widest italic">
+            <!-- Repetir el texto varias veces para garantizar el efecto infinito -->
+            <span>¡¡Aprovecha este miércoles de promociones!!</span>
+            <span>¡¡Aprovecha este miércoles de promociones!!</span>
+            <span>¡¡Aprovecha este miércoles de promociones!!</span>
+            <span>¡¡Aprovecha este miércoles de promociones!!</span>
+            <span>¡¡Aprovecha este miércoles de promociones!!</span>
+            <span>¡¡Aprovecha este miércoles de promociones!!</span>
+        </div>
+    </div>
+    <!-- Fin del Carrusel -->
+
+
+    <!-- Botón Fijo de Enviar a Domicilio (CTA) - Mejorado con nueva clase CTA-BUTTON -->
     <div class="fixed bottom-0 left-0 right-0 p-4 bg-transparent shadow-2xl z-20 lg:static lg:mt-6 lg:p-0 lg:shadow-none lg:border-none lg:bg-transparent lg:max-w-6xl lg:mx-auto">
-        <button id="delivery-cta" class="w-full lg:w-96 mx-auto block py-3 px-6 bg-primary-red text-white font-bold text-lg rounded-xl shadow-lg hover:bg-red-700 transition duration-300">
+        <button id="delivery-cta" class="w-full lg:w-96 mx-auto block py-3 px-6 text-white font-bold text-lg rounded-xl shadow-lg cta-button">
             🛵 Servicio a Domicilio
         </button>
     </div>
 
     <!-- Fondo de superposición (backdrop) para el menú móvil -->
-    <div id="menu-backdrop" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden"></div>
+    <div id="menu-backdrop" class="fixed inset-0 bg-black bg-opacity-70 z-20 hidden lg:hidden"></div>
 
     <!-- Menú Desplegable Lateral (Side Menu) para Móviles -->
-    <!-- CAMBIO: Fondo rojo (primary-red) para que coincida con el encabezado -->
-    <aside id="side-menu" class="fixed top-0 right-0 w-64 max-w-xs h-full bg-primary-red shadow-2xl z-30 transform translate-x-full transition-transform duration-300 ease-in-out lg:hidden">
-        <!-- CAMBIO: Cabecera del menú con texto blanco y borde rojo oscuro -->
-        <div class="p-4 border-b border-red-700 flex justify-between items-center">
-            <h3 class="text-xl font-bold text-white">Menú</h3>
-            <!-- Botón para cerrar el menú, ahora blanco contra rojo -->
-            <button id="close-menu-btn" class="p-2 text-white hover:bg-red-700 rounded focus:outline-none" aria-label="Cerrar Menú">
+    <aside id="side-menu" class="fixed top-0 right-0 w-64 max-w-xs h-full bg-red-900 shadow-2xl z-30 transform translate-x-full transition-transform duration-300 ease-in-out lg:hidden">
+        <div class="p-4 border-b border-transparent flex justify-between items-center">
+            <h3 class="text-xl font-extrabold text-white">Categorías</h3>
+            <button id="close-menu-btn" class="p-2 text-white hover:bg-red-800 rounded focus:outline-none" aria-label="Cerrar Menú">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
-        <div id="nav-content" class="p-4 flex flex-col space-y-2">
-            <!-- Los botones de sección se inyectarán aquí mediante JavaScript (ahora en tonos de rojo oscuro) -->
+        <div id="nav-content" class="p-4 flex flex-col space-y-3">
+            <!-- Los botones de sección se inyectarán aquí mediante JavaScript (clase nav-btn-mobile) -->
         </div>
     </aside>
 
+    <!-- Sección de Plataformas de Entrega (Delivery Platforms) - ESTILO MEJORADO y ADAPTATIVO -->
+    <div class="max-w-6xl mx-auto p-4 pt-8 sm:pt-12 text-center pb-8">
+        <!-- Título de la sección de plataformas. Se usa text-primary-red para que destaque sin fondo. -->
+        <p class="text-2xl font-extrabold mb-6 text-primary-red">Encuéntranos también en:</p>
+        <!-- CLASES ACTUALIZADAS: Uso de 'gap' para manejar el espaciado horizontal y vertical en el wrap de forma eficiente y adaptativa. -->
+        <div class="flex flex-wrap justify-center gap-4 md:gap-6">
+            <!-- DiDi Food -->
+            <a href="#" target="_blank" class="block w-24 h-24 rounded-2xl delivery-platform-icon border-2 border-transparent hover:border-primary-red transition duration-300 transform hover:scale-110" aria-label="DiDi Food">
+                <img src="didi.jpeg" alt="Logo DiDi Food" class="w-full h-full object-cover rounded-2xl" onerror="this.onerror=null; this.src='https://placehold.co/100x100/F06300/FFFFFF?text=DiDi\nFood'">
+            </a>
+            <!-- Uber Eats -->
+            <a href="#" target="_blank" class="block w-24 h-24 rounded-2xl delivery-platform-icon border-2 border-transparent hover:border-primary-red transition duration-300 transform hover:scale-110" aria-label="Uber Eats">
+                <img src="uber.jpg" alt="Logo Uber Eats" class="w-full h-full object-cover rounded-2xl" onerror="this.onerror=null; this.src='https://placehold.co/100x100/06C167/FFFFFF?text=Uber\nEats'">
+            </a>
+            <!-- Rappi -->
+            <a href="#" target="_blank" class="block w-24 h-24 rounded-2xl delivery-platform-icon border-2 border-transparent hover:border-primary-red transition duration-300 transform hover:scale-110" aria-label="Rappi">
+                <img src="rappi.png" alt="Logo Rappi" class="w-full h-full object-cover rounded-2xl" onerror="this.onerror=null; this.src='https://placehold.co/100x100/FFC700/000000?text=Rappi'">
+            </a>
+        </div>
+    </div>
+    <!-- Fin de Sección de Plataformas -->
+
     <!-- Contenedor Principal del Menú (Padding superior normalizado) -->
     <main id="menu-container" class="max-w-6xl mx-auto p-4 sm:p-8 lg:pb-8">
-        <!-- El padding inferior (pb-8) evita que el contenido quede cubierto por el CTA fijo en móvil -->
         
         <!-- Aquí se generará el contenido del menú con JavaScript -->
 
     </main>
 
-    <!-- Modal/Action Sheet para Selección de Número de Envío -->
-    <div id="delivery-modal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden" aria-modal="true" role="dialog">
-        <div id="delivery-modal-content" class="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl p-6 transform translate-y-full transition-transform duration-300 ease-out lg:bottom-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:max-w-md lg:rounded-xl">
-            <h3 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Selecciona un número de envío</h3>
-            <div id="phone-buttons-container" class="space-y-3">
+    <!-- Sección de Ubicación - NUEVA SECCIÓN -->
+    <section id="ubicacion" class="max-w-6xl mx-auto p-4 sm:p-8 lg:pb-8 mt-12">
+        <!-- Título de la sección de Ubicación, usa el mismo estilo que los títulos de menú -->
+        <h2 class="text-4xl sm:text-5xl font-extrabold mb-8 text-primary-red uppercase tracking-wider border-b-2 border-red-800 pb-3">
+            🗺️ Ubicación
+        </h2>
+        <div class="bg-transparent rounded-2xl p-4 shadow-2xl">
+            <!-- Mapa de Google Maps Embebido (Placeholder para Zócalo, CDMX) -->
+            <div class="relative w-full h-96 rounded-xl overflow-hidden shadow-2xl">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3762.623201419794!2d-99.1332000!3d19.4326!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1f8753228d40d%3A0x199b4f620f4c33c3!2sZ%C3%B3calo%2C%20Centro%20Hist%C3%B3rico%20de%20la%20Cdad.%20de%20M%C3%A9xico%2C%20Cuauht%C3%A9moc%2C%2006000%20Ciudad%20de%20M%C3%A9xico%2C%20CDMX!5e0!3m2!1ses-419!2smx!4v1700000000000!5m2!1ses-419!2smx" 
+                    width="100%" 
+                    height="100%" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
+            </div>
+
+            <div class="mt-6 text-center">
+                <p class="text-xl font-semibold text-light-text mb-2">📍 Dirección:</p>
+                <p class="text-2xl font-extrabold text-primary-white">Ubicacion no real ya que es un ejemplo para tu negocio</p>
+                <!-- Enlace directo para abrir el mapa en la aplicación de Google Maps -->
+                <a href="https://maps.app.goo.gl/YourActualLocationLink" target="_blank" class="mt-4 inline-block py-3 px-8 bg-primary-red text-white font-bold text-lg rounded-xl hover:bg-red-700 transition duration-300 shadow-lg transform hover:scale-105">
+                    Abrir en Google Maps
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- Fin Sección de Ubicación -->
+
+
+    <!-- Modal/Action Sheet para Selección de Número de Envío - ESTILO MEJORADO -->
+    <div id="delivery-modal" class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden" aria-modal="true" role="dialog">
+        <div id="delivery-modal-content" class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl p-8 transform translate-y-full transition-transform duration-300 ease-out lg:bottom-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:max-w-md lg:rounded-xl">
+            <h3 class="text-2xl font-extrabold text-gray-900 mb-5 border-b border-gray-200 pb-3">Llama para Ordenar</h3>
+            <div id="phone-buttons-container" class="space-y-4">
                 <!-- Botones de número se inyectarán aquí por JS -->
             </div>
-            <button id="close-delivery-modal" class="mt-6 w-full py-3 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition duration-300">
+            <button id="close-delivery-modal" class="mt-6 w-full py-3 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition duration-300 border">
                 Cerrar
             </button>
         </div>
     </div>
 
-    <!-- Pie de Página Sencillo (Actualizado con fondo negro puro para mayor contraste) -->
-    <!-- Se ha cambiado 'bg-dark-bg' a 'bg-black' -->
-    <footer class="bg-black text-center p-6 mt-12 mb-20 lg:mb-0 text-light-text">
+    <!-- Pie de Página Sencillo -->
+    <footer class="bg-black text-center p-6 mt-12 mb-20 lg:mb-0 text-gray-500 border-t border-transparent">
         <p class="text-sm">&copy; 2025 Tacos SAN MIGUEL. Todos los derechos reservados.</p>
-        <p class="text-xs mt-1">Desarrollador Web: Ing. Edgar Lomas</p>
+        <p class="text-xs mt-1">Desarrollado por Ing. Edgar Lomas</p>
     </footer>
 
     <script>
-        // --- DATA SECTION (Ahora usa rutas de imagen locales/reales en lugar de placeholders) ---
+        // --- DATA SECTION (Modificada para incluir "Ubicación") ---
         
         // Array de objetos que define todo el menú con IDs para la navegación
         const menuData = [
@@ -153,9 +273,9 @@
                     // RUTA DE EJEMPLO: Reemplaza './images/...' con la ruta real de tu imagen.
                     { name: "Tacos de Trompo", description: "Carne de pastor marinada en tortilla de maíz.", imageUrl: './tacotrompo.jpg', price: 20 },
                     { name: "Tacos de Bistec", description: "Jugoso bistec a la plancha en tortilla de maíz.", imageUrl: './bistec.jpg', price: 22 },
-                    { name: "Tacos Mixtos", description: "Combinación de trompo y bistec.", imageUrl: './tacotrompo.jpg', price: 21 },
-                    { name: "Caprichos", description: "Tortilla de maíz rellena de queso, bistec y aguacate.", imageUrl: './tacotrompo.jpg', price: 40 },
-                    { name: "Volcanes", description: "Tostada crujiente con queso gratinado y la carne de tu elección.", imageUrl: './tacotrompo.jpg', price: 38 }
+                    { name: "Tacos Mixtos", description: "Combinación de trompo y bistec.", imageUrl: './mixtos.jpg', price: 21 },
+                    { name: "Caprichos", description: "Tortilla de maíz rellena de queso, bistec y aguacate.", imageUrl: './quesoaguacatebistec.jpeg', price: 40 },
+                    { name: "Volcanes", description: "Tostada crujiente con queso gratinado y la carne de tu elección.", imageUrl: './tostada.jpg', price: 38 }
                 ]
             },
             {
@@ -163,12 +283,12 @@
                 icon: "🍔",
                 id: "hamburguesas",
                 items: [
-                    { name: "Hamburguesa Sencilla", description: "Carne, queso y verduras frescas (sin papas).", imageUrl: './burguer.jpg', price: 65 },
-                    { name: "Hamburguesa Sencilla con Papas", description: "Carne, queso y verduras frescas (incluye papas).", imageUrl: './burguer.jpg', price: 85 },
-                    { name: "Bisteckburguer con Papas", description: "Hamburguesa con un toque de bistec extra (incluye papas).", imageUrl: './burguer.jpg', price: 95 },
+                    { name: "Hamburguesa Sencilla", description: "Carne, queso y verduras frescas (sin papas).", imageUrl: './sencilla.png', price: 65 },
+                    { name: "Hamburguesa Sencilla con Papas", description: "Carne, queso y verduras frescas (incluye papas).", imageUrl: './sencillacpapas.png', price: 85 },
+                    { name: "Bisteckburguer con Papas", description: "Hamburguesa con un toque de bistec extra (incluye papas).", imageUrl: './bistecbur.jpg', price: 95 },
                     { name: "Trompo Búrguer con Papas", description: "Hamburguesa con la deliciosa carne de trompo (incluye papas).", imageUrl: './burguer.jpg', price: 90 },
-                    { name: "Hamburguesa Doble con Papas", description: "Doble carne, doble queso (incluye papas).", imageUrl: './burguer.jpg', price: 110 },
-                    { name: "Hamburguesa Hawaiana con Papas", description: "Con jamón y piña para un toque dulce (incluye papas).", imageUrl: './burguer.jpg', price: 90 }
+                    { name: "Hamburguesa Doble con Papas", description: "Doble carne, doble queso (incluye papas).", imageUrl: './burguerdoble.png', price: 110 },
+                    { name: "Hamburguesa Hawaiana con Papas", description: "Con jamón y piña para un toque dulce (incluye papas).", imageUrl: './hawaiana.jpeg', price: 90 }
                 ]
             },
             {
@@ -177,11 +297,11 @@
                 id: "harinas",
                 items: [
                     { name: "Gringas", description: "Tortilla de harina con queso y trompo.", imageUrl: './harina.jpg', price: 40 },
-                    { name: "Campechana Grande", description: "Tortilla de harina con queso, bistec y trompo.", imageUrl: './harina.jpg', price: 55 },
-                    { name: "Burrito", description: "Tortilla de harina rellena de frijol y carne (deshebrada, trompo, bistec o mixtos).", imageUrl: './harina.jpg', price: 60 },
-                    { name: "Pirata Grande", description: "Tortilla de harina con bistec y abundante queso gratinado.", imageUrl: './harina.jpg', price: 65 },
-                    { name: "Quesadilla Grande", description: "Tortilla de harina con gran porción de queso Chihuahua.", imageUrl: './harina.jpg', price: 50 },
-                    { name: "Costra de Queso", description: "Una capa crujiente de queso gratinado con la carne que elijas.", imageUrl: './harina.jpg', price: 70 }
+                    { name: "Campechana Grande", description: "Tortilla de harina con queso, bistec y trompo.", imageUrl: './campe.jpg', price: 55 },
+                    { name: "Burrito", description: "Tortilla de harina rellena de frijol y carne (deshebrada, trompo, bistec o mixtos).", imageUrl: './burrito.jpg', price: 60 },
+                    { name: "Pirata Grande", description: "Tortilla de harina con bistec y abundante queso gratinado.", imageUrl: './pirata.png', price: 65 },
+                    { name: "Quesadilla Grande", description: "Tortilla de harina con gran porción de queso Chihuahua.", imageUrl: './quesadilla.jpg', price: 50 },
+                    { name: "Costra de Queso", description: "Una capa crujiente de queso gratinado con la carne que elijas.", imageUrl: './cdqueso.jpg', price: 70 }
                 ]
             },
             {
@@ -190,9 +310,9 @@
                 id: "papas",
                 items: [
                     { name: "Papas", description: "Una porción de papas a la francesa.", imageUrl: './papas.png', price: 40 },
-                    { name: "Papa Asada", description: "Papa grande al horno rellena de mantequilla, queso y topping de tu elección (trompo, bistec, mixta o con champiñones).", imageUrl: './papas.png', price: 75 },
-                    { name: "Orden de Papas a la Francesa", description: "Porción grande de papas fritas.", imageUrl: './papas.png', price: 50 },
-                    { name: "Orden de Papas Galbana", description: "Papas fritas sazonadas a la manera de la casa.", imageUrl: './papas.png', price: 55 }
+                    { name: "Papa Asada", description: "Papa grande al horno rellena de mantequilla, queso y topping de tu elección (trompo, bistec, mixta o con champiñones).", imageUrl: './papaasada.jpg', price: 75 },
+                    { name: "Orden de Papas a la Francesa", description: "Porción grande de papas fritas.", imageUrl: './papasorden.jpeg', price: 50 },
+                    { name: "Orden de Papas Galbana", description: "Papas fritas sazonadas a la manera de la casa.", imageUrl: './papassason.jpg', price: 55 }
                 ]
             },
             {
@@ -200,7 +320,7 @@
                 icon: "🥣",
                 id: "frijoles-charros",
                 items: [
-                    { name: "Frijoles Charros (Normal 1/2 Litro)", description: "Frijoles tradicionales con tocino y salchicha.", imageUrl: './frijoles.jpg', price: 45 },
+                    { name: "Frijoles Charros (Normal 1/2 Litro)", description: "Frijoles tradicionales con tocino y salchicha.", imageUrl: './frijo.jpg', price: 45 },
                     { name: "Frijoles Charros Preparados 1/2 Litro", description: "Frijoles charros enriquecidos con trompo, bistec o mixtos.", imageUrl: './frijoles.jpg', price: 60 }
                 ]
             },
@@ -210,28 +330,32 @@
                 id: "bebidas",
                 items: [
                     { name: "Coca Cola", description: "Refresco de cola de 355 ml.", imageUrl: './355coca.jpeg', price: 35 },
-                    { name: "Coca Cola", description: "Refresco de cola de 600 ml.", imageUrl: './355coca.jpeg', price: 40 },
-                    { name: "Coca Cola", description: "Refresco de cola de 1.25 litros.", imageUrl: './355coca.jpeg', price: 60 },
+                    { name: "Coca Cola", description: "Refresco de cola de 600 ml.", imageUrl: './600.png', price: 40 },
+                    { name: "Coca Cola", description: "Refresco de cola de 1.25 litros.", imageUrl: './125.png', price: 60 },
                     { name: "Agua Natural", description: "Botella de agua natural purificada de 600 ml.", imageUrl: './agua.png', price: 25 }
                 ]
             },
-            // SECCIÓN DE PROMOCIONES AGREGADA
+            // SECCIÓN DE PROMOCIONES
             {
                 section: "Promociones",
-                icon: "⭐", // Icono de estrella para promociones
+                icon: "⭐", 
                 id: "promociones",
                 items: [
-                    { name: "Paquete 1", description: "1 orden de bistec, 1 orden de trompo, 1 campechana y 1 gringa.", imageUrl: './images/paquete-1.jpg', price: 300 },
-                    { name: "Paquete 2", description: "4 campechanas grandes (tortilla de harina con queso, bistec y trompo).", imageUrl: './images/paquete-2.jpg', price: 300 },
-                    { name: "Paquete 3", description: "3 órdenes mixtas (combinación de trompo y bistec, 5 tacos cada orden).", imageUrl: './images/paquete-3.jpg', price: 270 },
-                    { name: "Paquete 4", description: "4 hamburguesas sencillas (carne, queso y verduras frescas, sin papas).", imageUrl: './images/paquete-4.jpg', price: 260 },
-                    { name: "Paquete 5", description: "2 órdenes de trompo (5 tacos c/u), 1 campechana y 1 pirata grande.", imageUrl: './images/paquete-5.jpg', price: 300 }
+                    { name: "Paquete 1", description: "1 orden de bistec, 1 orden de trompo, 1 campechana y 1 gringa.", imageUrl: './promo1.png', price: 300 },
+                    { name: "Paquete 2", description: "4 campechanas grandes (tortilla de harina con queso, bistec y trompo).", imageUrl: './prom2.png', price: 300 }
+
                 ]
+            },
+            // NUEVA SECCIÓN PARA LA NAVEGACIÓN MÓVIL
+            {
+                section: "Ubicación",
+                icon: "🗺️", 
+                id: "ubicacion",
+                items: [] 
             }
-            // FIN DE SECCIÓN DE PROMOCIONES
         ];
 
-        // --- DATA DE NÚMEROS DE ENVÍO ---
+        // --- DATA DE NÚMEROS DE ENVÍO (No Modificada) ---
         const deliveryNumbers = [
             // Números de ejemplo. ¡Recuerda reemplazarlos por tus números reales!
             { name: "Línea 1 - Principal", number: "tel:+528180001000", display: "81 8000 1000" },
@@ -241,7 +365,7 @@
 
         const container = document.getElementById('menu-container');
 
-        // --- FUNCIONES DE NAVEGACIÓN LATERAL (Menú Hamburguesa) ---
+        // --- FUNCIONES DE NAVEGACIÓN LATERAL (Menú Hamburguesa) (Solo cambio de clases) ---
 
         const hamburgerBtn = document.getElementById('hamburger-btn');
         const closeMenuBtn = document.getElementById('close-menu-btn');
@@ -269,7 +393,7 @@
         menuBackdrop.addEventListener('click', () => toggleMenu(false));
 
 
-        // --- FUNCIONES DE MODAL DE ENVÍO ---
+        // --- FUNCIONES DE MODAL DE ENVÍO (Solo cambio de clases) ---
         const deliveryCtaBtn = document.getElementById('delivery-cta');
         const deliveryModal = document.getElementById('delivery-modal');
         const deliveryModalContent = document.getElementById('delivery-modal-content');
@@ -305,13 +429,13 @@
             phoneButtonsContainer.innerHTML = '';
             deliveryNumbers.forEach(contact => {
                 const button = document.createElement('a');
-                // Usa el protocolo tel: para iniciar una llamada
+                // Clase mejorada para los botones del modal: más prominentes y con color primario
                 button.href = contact.number;
-                button.className = 'w-full flex justify-between items-center py-3 px-4 bg-gray-100 text-gray-800 font-semibold rounded-lg hover:bg-primary-red hover:text-white transition duration-200 shadow-md';
-                // Contenido del botón con nombre de línea y número
+                button.className = 'w-full flex justify-between items-center py-4 px-5 bg-red-50 text-gray-800 font-bold rounded-xl hover:bg-red-100 transition duration-200 shadow-md border border-gray-200';
+                
                 button.innerHTML = `
-                    <span class="text-sm font-medium">${contact.name}</span>
-                    <span class="text-lg font-extrabold">${contact.display}</span>
+                    <span class="text-base font-semibold text-gray-700">${contact.name}</span>
+                    <span class="text-xl font-extrabold text-primary-red">${contact.display}</span>
                 `;
                 // Añadir evento click para cerrar el modal al seleccionar un número
                 button.addEventListener('click', closeDeliveryModal);
@@ -330,65 +454,68 @@
         });
 
 
-        // --- FUNCIONES DE RENDERIZADO DEL MENÚ ---
+        // --- FUNCIONES DE RENDERIZADO DEL MENÚ (Cambios en clases para mejor estilo) ---
 
         // Función para renderizar el menú como un catálogo
         function renderMenu() {
             container.innerHTML = ''; // Limpiar el contenedor
             
-            menuData.forEach(category => {
+            // Filtramos solo las secciones que tienen items (es decir, las secciones de comida)
+            const menuCategories = menuData.filter(category => category.items.length > 0);
+
+            menuCategories.forEach(category => {
                 // Título de la sección
                 const sectionHeader = document.createElement('h2');
-                // Se removieron las clases 'border-b-2' y 'border-primary-red' para una apariencia más limpia.
-                // El padding inferior se aumentó a 'pb-4' para mantener la separación.
-                sectionHeader.className = 'text-3xl sm:text-4xl font-bold mt-10 mb-6 text-primary-red pb-4';
+                // Estilo mejorado para el título: tamaño grande, mayúsculas y color rojo principal
+                sectionHeader.className = 'text-4xl sm:text-5xl font-extrabold mt-12 mb-8 text-primary-red uppercase tracking-wider border-b-2 border-red-800 pb-3';
                 sectionHeader.innerHTML = `${category.icon} ${category.section}`;
                 sectionHeader.id = category.id; // Asignar el ID para navegación
                 container.appendChild(sectionHeader);
 
                 // Grid para los elementos de la sección (Catálogo)
                 const itemsGrid = document.createElement('div');
-                // Cuadrícula de 1, 2 o 3 columnas según el tamaño de la pantalla
-                itemsGrid.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8';
+                // Cuadrícula con espacios grandes para mejor presentación
+                itemsGrid.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10';
 
                 category.items.forEach(item => {
                     // Tarjeta del producto (Catálogo vertical)
                     const itemCard = document.createElement('div');
-                    // Tarjeta ahora con fondo blanco sólido
-                    itemCard.className = 'menu-item-card bg-white rounded-xl shadow-xl overflow-hidden flex flex-col hover:shadow-2xl'; 
+                    // Clase 'menu-item-card' contiene los nuevos estilos hover y sombra
+                    itemCard.className = 'menu-item-card rounded-2xl shadow-xl flex flex-col cursor-pointer'; 
                     
                     // Imagen del Producto
                     const image = document.createElement('img');
                     image.src = item.imageUrl; // *** AQUÍ USA LA RUTA DE LA IMAGEN ***
                     image.alt = item.name;
-                    // Clase para la imagen: ocupa todo el ancho y tiene una altura fija
-                    image.className = 'w-full h-48 object-cover';
+                    // Imagen con esquinas redondeadas en la parte superior
+                    image.className = 'w-full h-56 object-cover rounded-t-2xl';
                     // Fallback de imagen en caso de error (muestra un placeholder de texto)
                     image.onerror = function() { 
                         this.src = 'https://placehold.co/400x300/4A5568/FFFFFF?text=Imagen+No+Disponible'; 
-                        this.className = 'w-full h-48 object-contain bg-gray-200';
+                        this.className = 'w-full h-56 object-contain bg-gray-700 rounded-t-2xl'; // Fondo oscuro para el placeholder
                     };
                     itemCard.appendChild(image);
 
                     // Contenido (Nombre y Descripción)
                     const content = document.createElement('div');
-                    content.className = 'p-4 flex-grow';
-                    // Textos dentro de la tarjeta deben ser oscuros
+                    content.className = 'p-5 flex-grow';
+                    // Textos oscuros para contraste sobre fondo claro
                     content.innerHTML = `
-                        <h3 class="text-xl font-bold text-gray-800">${item.name}</h3>
+                        <h3 class="text-xl font-extrabold text-gray-900">${item.name}</h3>
                         <p class="text-sm text-gray-500 mt-1">${item.description}</p>
                     `;
                     itemCard.appendChild(content);
 
-                    // Precio (Siempre en la parte inferior, destacado)
+                    // Precio (Siempre en la parte inferior, destacado con un fondo sutil)
                     const priceContainer = document.createElement('div');
-                    priceContainer.className = 'p-4 pt-0 text-right border-t border-gray-100';
-                    // Se usa `item.price` para mostrar el precio
+                    // Nuevo estilo para la barra de precio: fondo gris sutil y borde superior
+                    priceContainer.className = 'p-5 pt-3 text-right bg-gray-50 border-t border-gray-100 rounded-b-2xl';
+                    
                     priceContainer.innerHTML = `
-                        <span class="text-3xl font-extrabold text-primary-red">
+                        <span class="text-4xl font-extrabold text-primary-red drop-shadow-sm">
                             $${item.price.toFixed(2)}
                         </span>
-                        <p class="text-xs text-gray-400">MXN</p>
+                        <p class="text-xs text-gray-400 font-semibold mt-0.5">Precio MXN</p>
                     `;
                     itemCard.appendChild(priceContainer);
 
@@ -399,17 +526,16 @@
             });
         }
 
-        // Función para configurar la barra de navegación móvil (ahora el menú lateral)
+        // Función para configurar la barra de navegación móvil (Ahora usa las nuevas clases de estilo)
         function setupMobileNav() {
             const navContent = document.getElementById('nav-content');
             navContent.innerHTML = '';
             
             menuData.forEach(category => {
                 const button = document.createElement('button');
-                // Usamos clases de Tailwind para darle estilo a los botones del menú lateral
+                // Clase 'nav-btn-mobile' contiene los nuevos estilos CSS
                 button.textContent = `${category.icon} ${category.section}`;
-                // CAMBIO: Fondo rojo oscuro (bg-red-700) y hover más oscuro para destacar sobre el fondo primary-red
-                button.className = 'w-full text-left px-4 py-2 rounded-lg text-lg font-semibold text-white bg-red-700 hover:bg-red-800 transition duration-150 ease-in-out';
+                button.className = 'w-full text-left px-4 py-3 rounded-xl text-lg font-bold text-white nav-btn-mobile transition duration-150 ease-in-out shadow-lg';
                 
                 button.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -421,7 +547,7 @@
                     if (targetElement) {
                         // Obtener la altura del header fijo para evitar que tape el título de la sección
                         const headerHeight = document.querySelector('header').offsetHeight;
-                        const fixedOffset = headerHeight + 20; // Altura del header + 20px de margen
+                        const fixedOffset = headerHeight + 30; // Altura del header + margen extra
 
                         const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - fixedOffset;
                         window.scrollTo({
@@ -442,4 +568,3 @@
     </script>
 </body>
 </html>
-
